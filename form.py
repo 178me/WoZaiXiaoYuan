@@ -47,17 +47,18 @@ tokenArray = []
 
 def main():
     for i in tokenArray:
-        data["taken"] = i
-        print("口令:"+i)
+        headers["token"] = i
+        print("口令:"+headers["token"])
         response = requests.post(
             "https://student.wozaixiaoyuan.com/heat/save.json",
-            #headers=headers,
+            headers=headers,
             data=data,
         ).json()
         print("返回值:")
         print(response)
         print("打卡时间:"+data["seq"])
         print("体温:"+data["temperature"])
+        time.sleep(1)
         r = response["code"]
         if r == 0:
             print("恭喜你打卡成功!")
