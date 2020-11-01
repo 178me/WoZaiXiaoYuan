@@ -46,6 +46,7 @@ tokenArray = []
               
 
 def main():
+    error = 0
     for i in tokenArray:
         headers["token"] = i
         print("口令:"+headers["token"])
@@ -64,7 +65,12 @@ def main():
             print("恭喜你打卡成功!")
         else:
             print(response["message"])
+            error = 1
     print("所有帐号打卡完成")
+    if error == 1:
+        requests.get(
+                "http://miaotixing.com/trigger?id=xxxxx",# 访问这个网站瞄提醒会给你微信一个消息，具体搜索公众号瞄提醒
+                )
 
 
 if __name__ == "__main__":
