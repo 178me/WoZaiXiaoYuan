@@ -1,10 +1,12 @@
 import requests, time, random
 import datetime
 
+# 获取随机体温
 def get_random_temprature():
     random.seed(time.ctime())
     return "{:.1f}".format(random.uniform(36.2, 36.7))
 
+# seq的1,2,3代表着早，中，晚
 def get_seq():
     current_hour = datetime.datetime.now()
     print("当前时间是:"+current_hour.strftime("%Y-%m-%d %H:%M:%S"))
@@ -16,6 +18,7 @@ def get_seq():
     else:
         return "3"
 
+# 头部信息，只需要修改token值
 headers = {
     "Host": "student.wozaixiaoyuan.com",
     "Content-Type": "application/x-www-form-urlencoded",
@@ -23,10 +26,11 @@ headers = {
     "Connection": "keep-alive",
     "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36 MicroMessenger/7.0.9.501 NetType/WIFI MiniProgramEnv/Windows WindowsWechat",
     "Referer": "https://servicewechat.com/wxce6d08f781975d91/147/page-frame.html",
-    "token": "098978fb-fe06-4979-85c4-6a2b0db6ca13",  # 此处填写token
+    "token": "",  # 此处填写token
     "Content-Length": "360",
 }
 
+# 需要提交的信息，抓包获取
 data = {
     "answers": '["0"]',
     "seq": get_seq(),
@@ -41,12 +45,11 @@ data = {
     "street": "上冲中约新街一巷",
 }
 
+# token数组 可以多个人使用
 tokenArray = []
-              
-              
 
+# 可以布置在云函数上定时运行 本人使用阿里云的函数计算服务
 def main():
-    error = 0
     for i in tokenArray:
         headers["token"] = i
         print("口令:"+headers["token"])
@@ -65,12 +68,17 @@ def main():
             print("恭喜你打卡成功!")
         else:
             print(response["message"])
-            error = 1
-    print("所有帐号打卡完成")
-    if error == 1:
-        requests.get(
-                "http://miaotixing.com/trigger?id=xxxxx",# 访问这个网站瞄提醒会给你微信一个消息，具体搜索公众号瞄提醒
+            # 喵提醒功能 xxxxxxx换成自己的喵码
+            requests.get(
+                "http://miaotixing.com/trigger?id=xxxxxxx",
+                {
+                    "id": "xxxxxxx",
+                    "text": "口令:"+headers["token"]+'\n'+response["message"],
+                    "type": "json"
+                    }
                 )
+    print("所有帐号打卡完成")
+
 
 
 if __name__ == "__main__":
