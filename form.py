@@ -15,8 +15,10 @@ def get_seq():
         return "1"
     elif 11 <= current_hour < 15:
         return "2"
-    else:
+    elif 17 <= current_hour < 21:
         return "3"
+    else:
+        return 1
 
 # 头部信息，只需要修改token值
 headers = {
@@ -50,6 +52,9 @@ tokenArray = []
 
 # 可以布置在云函数上定时运行 本人使用阿里云的函数计算服务
 def main():
+    if data['seq'] == 0:
+        print("不在打卡时间范围内")
+        return 0
     for i in tokenArray:
         headers["token"] = i
         print("口令:"+headers["token"])
