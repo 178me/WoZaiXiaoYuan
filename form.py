@@ -58,6 +58,7 @@ def main():
     for i in tokenArray:
         headers["token"] = i
         print("口令:"+headers["token"])
+        data["temperature"] = get_random_temprature()
         response = requests.post(
             "https://student.wozaixiaoyuan.com/heat/save.json",
             headers=headers,
