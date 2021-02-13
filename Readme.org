@@ -9,6 +9,8 @@
   2. 将代码注释再看一遍
   3. 将代码注释再再看一遍
 
+* 文档
+  发现一个老哥文档写的很详细，很多细节可以参考参考:https://github.com/Chaney1024/wozaixiaoyuan
 * 使用工具
   - fiddler :: 抓包工具
   - python :: 脚本语言
