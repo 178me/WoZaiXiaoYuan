@@ -19,10 +19,10 @@ def send_warn(text):
     '''
     lib.send_message(text,"tzTCCaL")
     # 发送间隔60秒 因为云函数不允许单次休眠太久 所以分次
-    time.sleep(16)
-    time.sleep(16)
-    time.sleep(16)
-    time.sleep(16)
+    #  time.sleep(16)
+    #  time.sleep(16)
+    #  time.sleep(16)
+    #  time.sleep(16)
 
 class WoZaiXiaoYuan():
     ''' 我在校园
@@ -134,14 +134,38 @@ class WoZaiXiaoYuan():
         ''' 获取令牌，并更新user_info
         :return: void
         '''
-        for i in range(len(self.user_info)):
-            # 修改获取文本的用户名
+        def set_netpad_text(i):
+            ''' 将网络剪贴板文本的内容更新到user_info
+            :param i: 用户下标
+            :return: void
+            '''
+            # 修改获取文本的用户名 只需要网络剪贴板的id
             arr = lib.get_netpad_text(self.user_info[i]["txtpad_name"])
             # 第一个文本 令牌
             self.user_info[i]["token"] = arr["note_content"].strip()
             # 第二个文本 令牌获取时间
             self.user_info[i]["token_date"] = datetime.datetime.strptime(\
                 arr["updated_time"], '%Y-%m-%d %H:%M:%S')
+
+        def set_txtpad_text(i):
+            ''' 将文本派文本的内容更新到user_info
+            :param i: 用户下标
+            :return: void
+            '''
+            # 修改获取文本的用户名 我的文本标题是token 和 token_date 修改成你自己的
+            token = lib.get_txtpad_text(self.user_info[i]["txtpad_name"],'token')
+            date = lib.get_txtpad_text(self.user_info[i]["txtpad_name"],'token_date')
+            # 第一个文本 令牌
+            self.user_info[i]["token"] = token[0].strip()
+            # 第二个文本 令牌获取时间
+            self.user_info[i]["token_date"] = datetime.datetime.strptime(\
+                date, '%Y-%m-%d %H:%M:%S')
+
+        for i in range(len(self.user_info)):
+            # 使用网络剪贴板
+            set_netpad_text(i)
+            # 使用文本派
+            #  set_txtpad_text(arr)
 
     def punch_card(self,punch_card_api,punch_card_info,token,index):
         ''' 打卡
@@ -201,9 +225,9 @@ def main():
     '''
     # 正常情况下 修改完data 和 user_info 字段信息就可以运行
     wzxy = WoZaiXiaoYuan()
-    # 使用网络剪贴板获取token 不需要的可以手动在user_info添加
+    # 使用网络剪贴板获取token 不需要的可以手动在user_info添加token并注释此功能
     wzxy.get_token_info()
-    # 
+    # 循环为每个用户打卡
     for index in range(len(wzxy.user_info)):
         # 调用健康打卡
         wzxy.punch_card(wzxy.health_url,wzxy.health_data,wzxy.user_info[index]["token"],index)
