@@ -78,7 +78,7 @@ class WoZaiXiaoYuan():
             # 抓到口令的日期 此字段影响提醒功能 建议填写
             "token_date":datetime.datetime.strptime(\
                     "2021-2-10 18:00:00", '%Y-%m-%d %H:%M:%S'),
-            "txtpad_name":"16be19dff5b6002d", # 文本派名称 必填
+            "txtpad_name":"", # 文本派名称 必填
             "txtpad_pwd":"",
             },
     ]

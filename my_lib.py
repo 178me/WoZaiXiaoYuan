@@ -87,7 +87,7 @@ class MyLib():
         :return: True || 错误信息
         '''
         result = requests.get(
-            "http://miaotixing.com/trigger?id=" + txt_id,
+                    "http://miaotixing.com/trigger?id="+txt_id+"&templ=p89Xe1D,10,调试,OWM4,发生变化",
             {
                 "id": txt_id,
                 "text": text,
