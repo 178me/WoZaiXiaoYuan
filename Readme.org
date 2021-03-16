@@ -11,6 +11,8 @@
 
 * 文档
   发现一个老哥文档写的很详细，很多细节可以参考参考:https://github.com/Chaney1024/wozaixiaoyuan
+* 注意
+  需要自己修改data中的地区信息
 * 使用工具
   - fiddler :: 抓包工具
   - python :: 脚本语言
