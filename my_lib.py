@@ -6,19 +6,18 @@ import json
 import time
 import requests
 
+
 class MyLib():
     ''' 函数类 '''
     debug = False
 
-    def log(self, obj='--->'):
+    def log(self, obj=""):
         ''' 调试输出
         :param obj: 输出对象
         :return: void
         '''
         if self.debug:
-            print("--->")
-            print(obj)
-            print("<---")
+            print("--->", obj)
 
     def get_txtpad_text(self, txtpad_name, text_title="all", txtpad_password=""):
         ''' 获取文本派指定用户的文本,需要json request warnings库
@@ -55,7 +54,7 @@ class MyLib():
                     text_array = txt_content[i]["content"].splitlines()[1:]
                     break
             else:
-                print("没有找到 " + text_title + " 标题，请确定标题是否正确")
+                self.log("没有找到 " + text_title + " 标题，请确定标题是否正确")
             return text_array
 
     def get_netpad_text(self, note_id=""):
@@ -77,17 +76,17 @@ class MyLib():
             del result["data"]["log_list"]
             return result["data"]
         else:
-            print("遇到错误 " + result['error'])
+            self.log("遇到错误 " + result['error'])
             return result['error']
 
     def send_message(self, text, txt_id):
         ''' 发送喵提醒消息:
         :param text: 消息
         :param txt_id: 喵文本id
-        :return: True || 错误信息
+        :return: True || False
         '''
         result = requests.get(
-                    "http://miaotixing.com/trigger?id="+txt_id+"&templ=p89Xe1D,10,调试,OWM4,发生变化",
+            "http://miaotixing.com/trigger?id="+txt_id,
             {
                 "id": txt_id,
                 "text": text,
@@ -95,16 +94,21 @@ class MyLib():
             }
         )
         if result.status_code == 502:
-            print(result.status_code)
-            self.send_message(text,txt_id)
+            self.send_message(text, txt_id)
             return True
         result = result.json()
         self.log(result)
         if result['code'] == 0:
             return True
+        if result['code'] == 102:
+            for _ in range(0, 4):
+                time.sleep((result["data"]["remaining"]+5)/4)
+            return True
+            #  self.send_message(text, txt_id)
         else:
-            print(result['msg'])
-            return result['msg']
+            self.log(result['msg'])
+            return False
+
 
 def test():
     ''' 测试
